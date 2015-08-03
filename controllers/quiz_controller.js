@@ -1,6 +1,6 @@
 var models = require('../models/models.js');
 
-// Autoload :id
+
 exports.load = function(req, res, next, quizId) {
   models.Quiz.find(quizId).then(
     function(quiz) {
@@ -12,7 +12,7 @@ exports.load = function(req, res, next, quizId) {
   ).catch(function(error){ next(error); });
 };
 
-//GET /quizes
+
 exports.index = function(req, res) {
 	if(req.query.search) {    
    		var search  = '%'+ req.query.search.replace(/ /g, '%') + '%';
@@ -32,18 +32,18 @@ exports.index = function(req, res) {
 	}
 };
 
-//GET /quizes
+
 exports.show = function(req, res) {
         res.render('quizes/show', { quiz: req.quiz, errors: [] });
 };
 
-// GET /quizes/:id/edit
+
 exports.edit = function(req, res) {
     var quiz = req.quiz;
     res.render('quizes/edit', {quiz: quiz, errors: []});
 };
 
-// GET /quizes/:id/answer
+
 exports.answer = function(req, res) {
   var resultado = 'Incorrecto';
     if (req.query.respuesta === req.quiz.respuesta){
@@ -52,20 +52,20 @@ exports.answer = function(req, res) {
     res.render('quizes/answer', {quiz: req.quiz, respuesta: resultado, errors: []});
 };
 
-// Get /author
+
 exports.author = function(req, res) {
-	res.render('author', {author: 'Fernando Castaño Torres', errors: []});
+	res.render('author', {author: 'Juan Leon', errors: []});
 }
 
-// GET /quizes/new
+
 exports.new = function(req, res) {
-  var quiz = models.Quiz.build(  //crea objeto quiz
+  var quiz = models.Quiz.build(  
     {pregunta: "Pregunta", respuesta: "Respuesta", tematica: "Tematica"}
   );
   res.render('quizes/new', {quiz: quiz, errors: []});
 };
 
-// GET /quizes/create
+
 exports.create = function(req, res) {
   var quiz = models.Quiz.build(req.body.quiz);
   quiz.validate().then(
@@ -73,7 +73,7 @@ exports.create = function(req, res) {
 		if(err) {
 			res.render('quizes/new', {quiz: quiz, errors: err.errors});
 		} else {
-			//guarda en DB los campos pregunta y respuesta de quiz
+			
   			quiz.save({fields: ["pregunta", "respuesta", "tematica"]}).then(function(){
     				res.redirect('/quizes');
   			});
@@ -95,7 +95,7 @@ exports.update = function(req, res) {
                 if(err) {
                         res.render('quizes/edit', {quiz: req.quiz, errors: err.errors});
                 } else {
-                        //guarda en DB los campos pregunta y respuesta de quiz
+                        
                         req.quiz.save({fields: ["pregunta", "respuesta", "tematica"]}).then(function(){
                                 res.redirect('/quizes');
                         });
@@ -106,7 +106,7 @@ exports.update = function(req, res) {
 
 }
 
-// Delete 
+
 exports.destroy = function(req, res) {
 	console.log('Se va a borrar la pregunta ' + req.quiz.pregunta);
 	req.quiz.destroy().then(function() {
